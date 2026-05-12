@@ -1,0 +1,20 @@
+# Entorno virtual de Python
+.venv/
+
+# Artifacts de build/deploy
+dist/
+
+# Claude Code
+.claude/
+
+# Reportes generados localmente
+reporte_iam.json
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# macOS
+.DS_Store

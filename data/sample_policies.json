@@ -1,0 +1,142 @@
+[
+  {
+    "PolicyName": "AdministradorTotal_CRITICO",
+    "PolicyDocument": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "FullAdminAccess",
+          "Effect": "Allow",
+          "Action": "*",
+          "Resource": "*"
+        }
+      ]
+    }
+  },
+
+  {
+    "PolicyName": "DesarrolladorSobrePermisado_ALTO",
+    "PolicyDocument": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "S3AccesoTotal",
+          "Effect": "Allow",
+          "Action": "s3:*",
+          "Resource": "*"
+        },
+        {
+          "Sid": "EscalacionPrivilegios",
+          "Effect": "Allow",
+          "Action": [
+            "iam:CreateUser",
+            "iam:AttachUserPolicy",
+            "iam:CreateAccessKey"
+          ],
+          "Resource": "*"
+        },
+        {
+          "Sid": "AsumirCualquierRol",
+          "Effect": "Allow",
+          "Action": "sts:AssumeRole",
+          "Resource": "*"
+        }
+      ]
+    }
+  },
+
+  {
+    "PolicyName": "CICDPipeline_Overpermissioned",
+    "PolicyDocument": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "EC2Completo",
+          "Effect": "Allow",
+          "Action": "ec2:*",
+          "Resource": "*"
+        },
+        {
+          "Sid": "CloudFormationCompleto",
+          "Effect": "Allow",
+          "Action": "cloudformation:*",
+          "Resource": "*"
+        },
+        {
+          "Sid": "IAMCompleto",
+          "Effect": "Allow",
+          "Action": "iam:*",
+          "Resource": "*"
+        },
+        {
+          "Sid": "NotActionProblematico",
+          "Effect": "Allow",
+          "NotAction": [
+            "iam:DeleteUser",
+            "iam:DeleteRole",
+            "organizations:DeleteAccount"
+          ],
+          "Resource": "*"
+        }
+      ]
+    }
+  },
+
+  {
+    "PolicyName": "ReadOnlyConRecursoWildcard_MEDIO",
+    "PolicyDocument": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "LecturaAmplia",
+          "Effect": "Allow",
+          "Action": [
+            "s3:GetObject",
+            "s3:ListBucket",
+            "dynamodb:GetItem",
+            "dynamodb:Query",
+            "rds:DescribeDBInstances"
+          ],
+          "Resource": "*"
+        }
+      ]
+    }
+  },
+
+  {
+    "PolicyName": "LambdaEjecutorBienEscopado_OK",
+    "PolicyDocument": {
+      "Version": "2012-10-17",
+      "Statement": [
+        {
+          "Sid": "CloudWatchLogs",
+          "Effect": "Allow",
+          "Action": [
+            "logs:CreateLogGroup",
+            "logs:CreateLogStream",
+            "logs:PutLogEvents"
+          ],
+          "Resource": "arn:aws:logs:us-east-1:123456789012:log-group:/aws/lambda/mi-funcion:*"
+        },
+        {
+          "Sid": "LeerSecreto",
+          "Effect": "Allow",
+          "Action": [
+            "secretsmanager:GetSecretValue"
+          ],
+          "Resource": "arn:aws:secretsmanager:us-east-1:123456789012:secret:prod/mi-app/db-*"
+        },
+        {
+          "Sid": "LeerDynamoDB",
+          "Effect": "Allow",
+          "Action": [
+            "dynamodb:GetItem",
+            "dynamodb:PutItem",
+            "dynamodb:UpdateItem"
+          ],
+          "Resource": "arn:aws:dynamodb:us-east-1:123456789012:table/MiTablaApp"
+        }
+      ]
+    }
+  }
+]

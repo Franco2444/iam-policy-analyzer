@@ -1,0 +1,5 @@
+# Para uso local (main.py): sin dependencias externas
+# Para uso en AWS (lambda_function.py): boto3 ya viene preinstalado en Lambda
+
+# Instalación local para desarrollo y deploy:
+boto3>=1.34.0

@@ -1,0 +1,79 @@
+{
+  "AWSTemplateFormatVersion": "2010-09-09",
+  "Description": "SecurityAuditRole para IAM Policy Analyzer. Se despliega en cada cuenta miembro de la organización. Permite que la Lambda de la cuenta de seguridad asuma este rol y lea las políticas IAM de la cuenta.",
+
+  "Parameters": {
+    "SecurityAccountId": {
+      "Type": "String",
+      "Description": "Account ID de la cuenta de seguridad donde corre la Lambda del IAM Analyzer",
+      "AllowedPattern": "[0-9]{12}"
+    },
+    "LambdaRoleName": {
+      "Type": "String",
+      "Default": "iam-analyzer-lambda-role",
+      "Description": "Nombre del IAM Role de la Lambda en la cuenta de seguridad"
+    }
+  },
+
+  "Resources": {
+    "SecurityAuditRole": {
+      "Type": "AWS::IAM::Role",
+      "Properties": {
+        "RoleName": "SecurityAuditRole",
+        "Description": "Rol de solo lectura para el IAM Policy Analyzer centralizado",
+
+        "AssumeRolePolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [{
+            "Effect": "Allow",
+            "Principal": {
+              "AWS": {
+                "Fn::Sub": "arn:aws:iam::${SecurityAccountId}:role/${LambdaRoleName}"
+              }
+            },
+            "Action": "sts:AssumeRole",
+            "Condition": {
+              "StringEquals": {
+                "sts:ExternalId": "IAMAnalyzerAudit"
+              }
+            }
+          }]
+        },
+
+        "Policies": [{
+          "PolicyName": "IAMReadOnly",
+          "PolicyDocument": {
+            "Version": "2012-10-17",
+            "Statement": [{
+              "Sid": "ReadIAMPolicies",
+              "Effect": "Allow",
+              "Action": [
+                "iam:ListPolicies",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "iam:ListRoles",
+                "iam:ListAttachedRolePolicies"
+              ],
+              "Resource": "*"
+            }]
+          }
+        }],
+
+        "Tags": [{
+          "Key": "ManagedBy",
+          "Value": "IAMPolicyAnalyzer"
+        }, {
+          "Key": "Purpose",
+          "Value": "SecurityAudit"
+        }]
+      }
+    }
+  },
+
+  "Outputs": {
+    "SecurityAuditRoleArn": {
+      "Description": "ARN del SecurityAuditRole creado",
+      "Value": { "Fn::GetAtt": ["SecurityAuditRole", "Arn"] }
+    }
+  }
+}
