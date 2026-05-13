@@ -46,11 +46,7 @@ jobs:
       - name: Run analyzer on sample policies
         run: |
           echo "Analizando data/sample_policies.json..."
-          python main.py -f data/sample_policies.json --output console
-          EXIT_CODE=$?
-          if [ $EXIT_CODE -eq 1 ]; then
-            echo ""
-            echo "Se detectaron hallazgos CRÍTICOS en las políticas de ejemplo."
-            echo "En un pipeline real esto bloquearía el deploy."
-            exit 1
-          fi
+          python main.py -f data/sample_policies.json --output console || true
+          echo ""
+          echo "Nota: los hallazgos críticos en este repo son intencionales (datos de demo)."
+          echo "En el repo de tu app real, reemplazá '|| true' por 'exit \$?' para bloquear deploys inseguros."
