@@ -3,7 +3,7 @@
 ![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![AWS Lambda](https://img.shields.io/badge/AWS-Lambda-orange?logo=awslambda&logoColor=white)
-![CI](https://github.com/Franco2444/iam-policy-analyzer/actions/workflows/test.yml/badge.svg)
+![CI/CD](https://github.com/Franco2444/iam-policy-analyzer/actions/workflows/test.yml/badge.svg)
 
 Herramienta de seguridad para AWS que analiza políticas IAM en busca de overpermissions, wildcards peligrosos y acciones de escalación de privilegios. Corre automáticamente todos los días como Lambda serverless, soporta múltiples cuentas via AWS Organizations y envía alertas por email cuando detecta hallazgos críticos.
 
